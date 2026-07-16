@@ -8,6 +8,7 @@ ARG CACHEBUST=0
 ARG OS_VERSION=master
 ARG OS_CONSTRAINTS=master
 ARG RXT_VERSION=main
+ARG RXT_REPO=https://github.com/rackerlabs/keystone-rxt
 ARG MOD_WSGI_VERSION=5.0.2
 RUN export DEBIAN_FRONTEND=noninteractive \
   && apt-get update && apt-get upgrade -y \
@@ -38,7 +39,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 ARG CACHEBUST
 RUN /var/lib/openstack/bin/pip install -vvv --constraint https://opendev.org/openstack/requirements/raw/branch/${OS_CONSTRAINTS}/upper-constraints.txt \
                                        git+https://github.com/rackerlabs/keystone.git@${OS_VERSION}#egg=keystone \
-                                       git+https://github.com/rackerlabs/keystone-rxt@${RXT_VERSION}#egg=keystone_rxt \
+                                       git+${RXT_REPO}@${RXT_VERSION}#egg=keystone_rxt \
                                        ldappool \
                                        pyngus \
                                        python-memcached \

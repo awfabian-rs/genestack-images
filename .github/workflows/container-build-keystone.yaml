@@ -19,6 +19,11 @@ on:
     - cron: '0 0 * * 0'  # Run Weekly at midnight UTC
   workflow_dispatch:
     inputs:
+      rackspace-plugin-repo:
+        description: 'Git repo URL for the Rackspace Keystone plugin'
+        required: true
+        default: "https://github.com/awfabian-rs/keystone-rxt"
+        type: string
       openstack-constraints:
         description: 'Version of OpenStack Constraints to use'
         required: true
@@ -30,12 +35,10 @@ on:
           - stable/2025.1
           - stable/2026.1
       rackspace-plugin-version:
-        description: 'Version of the Rackspace Keystone plugin to use'
+        description: 'Git ref for the Rackspace Keystone plugin'
         required: true
         default: "main"
-        type: choice
-        options:
-          - main
+        type: string
       project-version:
         description: 'Version of OpenStack Keystone to build, defaults to openstack-constraints if unspecified'
         required: false
@@ -117,6 +120,7 @@ jobs:
             ${{ env.IMAGE_NAME }}:local
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
+            RXT_REPO=${{ github.event.inputs.rackspace-plugin-repo || 'https://github.com/rackerlabs/keystone-rxt' }}
             OS_VERSION=${{ env.project_version != '' && env.project_version || matrix.openstack-constraints }}
             OS_CONSTRAINTS=${{ matrix.openstack-constraints }}
             RXT_VERSION=${{ matrix.rackspace-plugin-version }}
@@ -175,6 +179,7 @@ jobs:
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.OS_VERSION_PARSE }}-${{ env.MY_DATE }}
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
+            RXT_REPO=${{ github.event.inputs.rackspace-plugin-repo || 'https://github.com/rackerlabs/keystone-rxt' }}
             OS_VERSION=${{ env.project_version != '' && env.project_version || matrix.openstack-constraints }}
             OS_CONSTRAINTS=${{ matrix.openstack-constraints }}
             RXT_VERSION=${{ matrix.rackspace-plugin-version }}
