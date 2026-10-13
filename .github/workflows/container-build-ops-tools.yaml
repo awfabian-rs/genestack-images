@@ -33,6 +33,7 @@ on:
           - main
           - release-2026.2.0.2
           - release-2026.3.0
+          - admin-password-rotation_OSPC-2408
 
 env:
   REGISTRY: ghcr.io
